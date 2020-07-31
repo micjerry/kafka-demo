@@ -19,6 +19,7 @@ die() {
 
 echo "
 kama-consumer-file.jar=kamaconsumer
+kama-producer-file.jar=kamaproducer
 " > ${APP_NAMESMAP}
 
 load_env() {

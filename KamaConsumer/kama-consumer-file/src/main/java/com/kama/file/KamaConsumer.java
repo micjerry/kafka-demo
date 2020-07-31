@@ -10,7 +10,7 @@ public class KamaConsumer {
 	private final Logger logger = LoggerFactory.getLogger(KamaConsumer.class);
 
 	
-	@KafkaListener(topics = "connect-kama-test")
+	@KafkaListener(topics = "kama-record")
 	public void receive(String message) throws IOException {
 		logger.info(String.format("#### -> Consumed message -> %s", message));
 	}
