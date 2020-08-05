@@ -17,16 +17,25 @@ public class KamaMysqlSinkTask extends SinkTask {
 	
 	private static Logger logger = LoggerFactory.getLogger(KamaMysqlSinkTask.class);
 	
-	private KamaMysqlService service;
+	private KamaMysqlService service = null;;
+	
+	private KamaMysqlSinkConnectorConfig config = null;
 
 	@Override
 	public String version() {
-		return "1.0.0";
+		return KamaMysqlSinkConnector.VERSION;
 	}
 
 	@Override
 	public void start(Map<String, String> props) {
-		service = KamaMysqlServiceFactory.getService(new KamaMysqlSinkConnectorConfig(props));
+		config = new KamaMysqlSinkConnectorConfig(props);
+		service = KamaMysqlServiceFactory.getService(config.getMysqlUrl(), config.getMysqlUser(), config.getMysqlPassword());
+		try {
+			service.start();
+		} catch (Exception e) {
+			logger.error("Can not start kamamysqlservice", e);
+			throw new ConnectException("Start failed");
+		}
 		
 	}
 

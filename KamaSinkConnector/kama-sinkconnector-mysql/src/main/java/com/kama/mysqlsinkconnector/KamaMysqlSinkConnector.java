@@ -13,22 +13,22 @@ import org.apache.kafka.connect.sink.SinkConnector;
 
 public class KamaMysqlSinkConnector extends SinkConnector {
 	
-	private Map<String, String> configProperties;
+	public static final String VERSION = "1.0.0";
+
+	private KamaMysqlSinkConnectorConfig connectorConfig;
 
 	@Override
 	public String version() {
-		return "1.0.0";
+		return VERSION;
 	}
 
 	@Override
 	public void start(Map<String, String> props) {
 		try {
-			configProperties = props;
-			new KamaMysqlSinkConnectorConfig(props);
+			connectorConfig = new KamaMysqlSinkConnectorConfig(props);
 		} catch (ConfigException e) {
-	          throw new ConnectException("Couldn't start KamaMysqlSinkConnector due to configuration error",e);
-	    }
-		
+			throw new ConnectException("Couldn't start KamaMysqlSinkConnector due to configuration error", e);
+		}
 	}
 
 	@Override
@@ -38,23 +38,26 @@ public class KamaMysqlSinkConnector extends SinkConnector {
 
 	@Override
 	public List<Map<String, String>> taskConfigs(int maxTasks) {
-		List<Map<String, String>> taskConfigs = new ArrayList<>();
-		Map<String, String> taskProps = new HashMap<>();
-		taskProps.putAll(configProperties);
+		List<Map<String, String>> taskConfigs = new ArrayList<>(maxTasks);
 		for (int i = 0; i < maxTasks; i++) {
-	          taskConfigs.add(taskProps);
-	      }
-	      return taskConfigs;
+			Map<String, String> taskProps = new HashMap<>(4);
+			taskProps.put(KamaMysqlSinkConnectorConfig.MYSQL_URL, connectorConfig.getMysqlUrl());
+			taskProps.put(KamaMysqlSinkConnectorConfig.MYSQL_USER, connectorConfig.getMysqlUser());
+			taskProps.put(KamaMysqlSinkConnectorConfig.MYSQL_PASSWORD, connectorConfig.getMysqlPassword());
+			taskProps.put(KamaMysqlSinkConnectorConfig.TABLE_NAME, connectorConfig.getTableName());
+			taskConfigs.add(taskProps);
+		}
+		return taskConfigs;
 	}
 
 	@Override
 	public void stop() {
-		return;	
+		return;
 	}
 
 	@Override
 	public ConfigDef config() {
-		return KamaMysqlSinkConnectorConfig.makeConf();
+		return KamaMysqlSinkConnectorConfig.config();
 	}
 
 }

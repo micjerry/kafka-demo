@@ -9,8 +9,6 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.kama.mysqlsinkconnector.KamaMysqlSinkConnectorConfig;
-
 public class KamaMysqlServiceImpl implements KamaMysqlService {
 	private static final int FIELDS_NUMBER = 11;
 
@@ -18,12 +16,18 @@ public class KamaMysqlServiceImpl implements KamaMysqlService {
 
 	private static Logger logger = LoggerFactory.getLogger(KamaMysqlServiceImpl.class);
 
-	private KamaMysqlSinkConnectorConfig config;
-
 	private KamaMysqlConnectionPool connectionPool = null;
-
-	public KamaMysqlServiceImpl(KamaMysqlSinkConnectorConfig config) {
-		this.config = config;
+	
+	private String mysql_url = null;
+	
+	private String mysql_user = null;
+	
+	private String mysql_password = null;
+	
+	public KamaMysqlServiceImpl(String url, String user, String pass) {
+		this.mysql_url = url;
+		this.mysql_user = user;
+		this.mysql_password = pass;
 	}
 
 	@Override
@@ -75,8 +79,8 @@ public class KamaMysqlServiceImpl implements KamaMysqlService {
 
 	@Override
 	public void start() throws Exception {
-		connectionPool = new KamaMysqlConnectionPool(config.getMysqlUrl(), config.getMysqlUser(),
-				config.getMysqlPassword());
+		connectionPool = new KamaMysqlConnectionPool(mysql_url, mysql_user,
+				mysql_password);
 		connectionPool.setupPool();
 	}
 

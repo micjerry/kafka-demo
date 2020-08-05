@@ -25,10 +25,10 @@ public class KamaMysqlSinkConnectorConfig extends AbstractConfig {
 	}
 	
 	public KamaMysqlSinkConnectorConfig(Map<String, String> parsedConfig) {
-		this(makeConf(), parsedConfig);
+		this(config(), parsedConfig);
 	}
 	
-	public static ConfigDef makeConf() {
+	public static ConfigDef config() {
 		return new ConfigDef()
 				.define(MYSQL_URL, Type.STRING, Importance.HIGH, MYSQL_URL_DOC)
 				.define(MYSQL_USER, Type.STRING, Importance.HIGH, MYSQL_USER_DOC)
