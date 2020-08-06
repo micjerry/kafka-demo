@@ -50,7 +50,11 @@ public class KamaMysqlServiceImpl implements KamaMysqlService {
 
 				PreparedStatement preparedStatement = conn.prepareStatement(KAMA_SQL);
 				for (int i = 1; i <= FIELDS_NUMBER; i++) {
-					preparedStatement.setString(i, fields[i - 1]);
+					if (i == 7) {
+						preparedStatement.setLong(i, Long.parseLong(fields[i - 1]));
+					} else {
+						preparedStatement.setString(i, fields[i - 1]);
+					}
 				}
 
 				preparedStatement.execute();

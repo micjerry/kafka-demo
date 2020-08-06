@@ -4,7 +4,6 @@ import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
-import org.apache.commons.dbcp.PoolableConnection;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
 import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
@@ -13,7 +12,7 @@ public class KamaMysqlConnectionPool {
 
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
 
-	private GenericObjectPool<PoolableConnection> gPool = null;
+	private GenericObjectPool gPool = null;
 
 	private PoolingDataSource datasource = null;
 
@@ -33,7 +32,7 @@ public class KamaMysqlConnectionPool {
 	public void setupPool() throws Exception{
 		Class.forName(JDBC_DRIVER);
 
-		gPool = new GenericObjectPool<PoolableConnection>();
+		gPool = new GenericObjectPool();
 		gPool.setMaxActive(5);
 
 		ConnectionFactory cf = new DriverManagerConnectionFactory(mysql_url, mysql_user, mysql_pass);
@@ -47,7 +46,7 @@ public class KamaMysqlConnectionPool {
 		return datasource;
 	}
 
-	public GenericObjectPool<PoolableConnection> getConnectionPool() {
+	public GenericObjectPool getConnectionPool() {
 		return gPool;
 	}
 }

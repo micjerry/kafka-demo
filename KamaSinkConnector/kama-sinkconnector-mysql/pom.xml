@@ -3,35 +3,34 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
             http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-  
-  <parent>
-    <groupId>com.kama</groupId>
-    <artifactId>kama-sinkconnector-parent</artifactId>
-    <version>1.0.0</version>
-    <relativePath>../</relativePath>
-  </parent>
-    
+  <modelVersion>4.0.0</modelVersion>  
+  <groupId>com.kama.connector</groupId>
   <artifactId>kama-sinkconnector-mysql</artifactId>
   <name>kama-sinkconnector-mysql</name>
+  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <kafka.version>2.6.0</kafka.version>
+  </properties>
 	
   <dependencies>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-	</dependency>
 	<dependency>
-      <groupId>org.springframework.kafka</groupId>
-      <artifactId>spring-kafka</artifactId>
+	  <groupId>org.apache.kafka</groupId>
+      <artifactId>kafka_2.13</artifactId>
+      <version>${kafka.version}</version>
 	</dependency>
 	<dependency>
       <groupId>org.apache.kafka</groupId>
       <artifactId>connect-api</artifactId>
+      <version>${kafka.version}</version>
 	</dependency>
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.21</version>
     </dependency>
     <dependency>
       <groupId>commons-dbcp</groupId>
@@ -45,10 +44,35 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <finalName>${project.artifactId}</finalName>
+                    <descriptors>
+                        <descriptor>src/main/assembly/package.xml</descriptor>
+                    </descriptors>
+                    <descriptorRefs>
+                      <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
