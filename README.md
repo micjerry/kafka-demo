@@ -28,3 +28,6 @@ producer/
   
   consumer will print the content of file  
 
+
+5. package connector  
+  mvn clean compile package assembly:single

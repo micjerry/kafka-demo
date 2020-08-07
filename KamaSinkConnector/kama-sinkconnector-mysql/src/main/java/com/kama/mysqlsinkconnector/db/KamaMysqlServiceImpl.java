@@ -42,7 +42,12 @@ public class KamaMysqlServiceImpl implements KamaMysqlService {
 			Iterator<String> iterator = recordsAsString.iterator();
 			while (iterator.hasNext()) {
 				String record = iterator.next();
-				String[] fields = record.split(",");
+				String formatedRecord = record;
+				if (record.endsWith(",")) {
+					formatedRecord = record + "NA";
+				}
+				
+				String[] fields = formatedRecord.split(",");
 				if (fields.length != FIELDS_NUMBER) {
 					logger.error("invalid record: {} ", record);
 					continue;
